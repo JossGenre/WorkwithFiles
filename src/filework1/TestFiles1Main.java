@@ -19,7 +19,8 @@ public class TestFiles1Main {
             System.out.println("4 - Вывод студента по ID");
             System.out.println("5 - Удаление студента по ID");
             System.out.println("6 - Изменить данные о студенте по ID");
-            System.out.println("7 - Выход");
+            System.out.println("7 - Фильтровать/соритровать");
+            System.out.println("8 - Выход");
             Scanner scanner = new Scanner(System.in);
             choise = scanner.nextLine();
             switch (choise) {
@@ -35,7 +36,9 @@ public class TestFiles1Main {
                     break;
                 case "6":tf1.changeStudentData();
                     break;
-                case "7":contin="N";
+                case "7":tf1.filterSort7();
+                break;
+                case "8":contin="N";
                     break;
             }
 

@@ -2,6 +2,7 @@ package filework1;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TestFiles1 {
     static int id;
@@ -215,8 +216,8 @@ public class TestFiles1 {
                     System.out.println("Введите оц по инж граф студента: ");
                     String cherchmark = scanner.nextLine();
 
-                    String newdata = thisid + "," + group + "," + lastname + "," + mathmark + "," + physmark + "," + itmark + "," + cherchmark;
-
+                  //String newdata = thisid + "," + group + "," + lastname + "," + mathmark + "," + physmark + "," + itmark + "," + cherchmark;
+                  String newdata =  "," + group + "," + lastname + "," + mathmark + "," + physmark + "," + itmark + "," + cherchmark;
                     rafile.write(newdata.getBytes());
 
                     System.out.println("Данные успешно изменены");
@@ -225,5 +226,48 @@ public class TestFiles1 {
             }
             rafile.close();
         }
+    }
+
+
+    public void filterSort7 () throws IOException {
+        Scanner scanner = new Scanner (System.in);
+        System.out.println("Введите группу: ");
+        String group = scanner.nextLine();
+        List<Student> studentsG = new ArrayList<>();
+        List<Student> studentsS = new ArrayList<>();
+        String s;
+
+        File file = new File("testfile.txt");
+        BufferedReader br = new BufferedReader(new FileReader("testfile.txt"));
+
+        while ((s = br.readLine()) != null) {
+            String[] ars = s.split(",");
+            if (ars[1].equals(group)) {
+                studentsG.add(new Student(Integer.parseInt(ars[0]), ars[1], ars[2],
+                        List.of(Integer.parseInt(ars[3]),Integer.parseInt(ars[4]),Integer.parseInt(ars[5]),Integer.parseInt(ars[6]))));
+
+            }
+        }
+        br.close();
+
+
+        studentsG.stream().
+                forEach(x->{
+                 double a =x.getMarkset().stream().mapToDouble(y->Integer.valueOf(y)).average().orElse(Double.NaN);
+                 x.setAvgmark(a);
+                });
+
+       studentsS= studentsG.stream()
+               .filter(x->x.getAvgmark()>7)
+               .sorted((x,y)->x.getName().compareTo(y.getName()))
+               .collect(Collectors.toList());
+
+
+        System.out.println("---------------------------------------------------------------------------------------------------------------");
+        System.out.println("      Id       Группа      Фамилия      Математика       Физика       Программирование       Инж. Графика      ");
+        System.out.println("---------------------------------------------------------------------------------------------------------------");
+
+        System.out.println(studentsS);
+
     }
 }
